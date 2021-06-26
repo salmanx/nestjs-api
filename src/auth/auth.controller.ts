@@ -45,7 +45,7 @@ export class AuthController {
     }
   }
 
-  @Get('/user/:user_id')
+  @Get('/users/:user_id/')
   @UseGuards(AuthGuard)
   async getuser(
     @Param('user_id') user_id: string,
@@ -65,7 +65,7 @@ export class AuthController {
     }
   }
 
-  @Patch('/user/:user_id')
+  @Patch('/users/:user_id/')
   @UseGuards(AuthGuard)
   @UseFilters(new HttpExceptionFilter())
   // @UsePipes(UpdateValidationPipe)
