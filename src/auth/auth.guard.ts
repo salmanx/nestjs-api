@@ -40,7 +40,7 @@ export class AuthGuard implements CanActivate {
       }
     } else {
       throw new UnauthorizedException({
-        message: 'Authentication Required',
+        message: 'Authentication Faild',
       });      
     }
   }
