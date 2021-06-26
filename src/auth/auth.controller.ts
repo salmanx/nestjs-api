@@ -47,11 +47,11 @@ export class AuthController {
   }
 
   @Get('/users/:user_id')
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   async getuser(
     @Param('user_id') user_id: string,
     @Res() res: Response,
-    @CurrentUser() currentUser,
+    // @CurrentUser() currentUser,
   ): Promise<any> {
     const user = await this.authService.findUserByUserID(user_id);
     if (user && user.user_id) {
@@ -79,7 +79,7 @@ export class AuthController {
   ): Promise<any> {
     const user = await this.authService.findUserByUserID(user_id);
     if (user && user.user_id) {
-      if (user.user_id !== currentUser.user_id) {
+      if (user_id !== currentUser.user_id) {
         return res
           .status(HttpStatus.FORBIDDEN)
           .send({ message: 'No Permission for Update' });
