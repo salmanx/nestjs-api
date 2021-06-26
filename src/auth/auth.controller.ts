@@ -35,17 +35,18 @@ export class AuthController {
     @Res() res: Response,
   ): Promise<any> {
     const user = await this.authService.signUp(authDto);
-    if (user) {
+    if (user && user.user_id) {
       return res.status(HttpStatus.OK).send({
         message: 'Account successfully created',
         user: pick(user, ['user_id', 'nickname']),
       });
-    } else {
-      return res.status(HttpStatus.BAD_REQUEST).send('error');
-    }
+    } 
+    // else {
+    //   return res.status(HttpStatus.BAD_REQUEST).send('error');
+    // }
   }
 
-  @Get('/users/:user_id/')
+  @Get('/users/:user_id')
   @UseGuards(AuthGuard)
   async getuser(
     @Param('user_id') user_id: string,
@@ -55,7 +56,7 @@ export class AuthController {
     const user = await this.authService.findUserByUserID(user_id);
     if (user && user.user_id) {
       return res.status(HttpStatus.OK).send({
-        message: `User details by ${user_id}`,
+        message: `User details by user_id`,
         user: pick(user, ['user_id', 'nickname', 'comment']),
       });
     } else {
@@ -65,7 +66,7 @@ export class AuthController {
     }
   }
 
-  @Patch('/users/:user_id/')
+  @Patch('/users/:user_id')
   @UseGuards(AuthGuard)
   @UseFilters(new HttpExceptionFilter())
   // @UsePipes(UpdateValidationPipe)
@@ -80,7 +81,7 @@ export class AuthController {
     if (user && user.user_id) {
       if (user.user_id !== currentUser.user_id) {
         return res
-          .status(HttpStatus.BAD_REQUEST)
+          .status(HttpStatus.FORBIDDEN)
           .send({ message: 'No Permission for Update' });
       } else {
         if (has(req.body, ['user_id']) || has(req.body, ['password'])) {

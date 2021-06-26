@@ -18,9 +18,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     let error;
     let message;
 
-    console.log(request.body);
-    
-
+  
     if (keys(request.body).length === 0 && request.method === 'POST') {
       error = 'required user_id and password';
       message = 'Account creation failed';
@@ -29,7 +27,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       error = 'already same user_id is used';
       message = 'Account creation failed';
     } else if (request.method === 'PATCH') {
-      (message = 'User updation failed'),
+      (message = 'Authentication Faild'),
         (error = 'required nickname or comment');
     } else {
       error = values(exception.message.message[0].constraints)[0];
