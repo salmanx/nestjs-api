@@ -3,6 +3,9 @@ import {
   CanActivate,
   ExecutionContext,
   BadRequestException,
+  UnauthorizedException,
+  HttpException,
+  HttpStatus
 } from '@nestjs/common';
 import { User } from 'src/db/entities/user.entity';
 import { pick } from 'lodash';
@@ -26,17 +29,19 @@ export class AuthGuard implements CanActivate {
           request.user = pick(user, ['id', 'user_id', 'nickname']);
           return authenticated;
         } else {
-          throw new BadRequestException({
+          throw new UnauthorizedException({
             message: 'Authentication Faild',
           });
         }
       } else {
-        throw new BadRequestException({
+        throw new UnauthorizedException({
           message: 'Authentication Faild',
         });
       }
     } else {
-      throw new BadRequestException({ message: 'Authentication Required' });
+      throw new UnauthorizedException({
+        message: 'Authentication Required',
+      });      
     }
   }
 }
