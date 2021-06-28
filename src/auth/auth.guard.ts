@@ -2,10 +2,7 @@ import {
   Injectable,
   CanActivate,
   ExecutionContext,
-  BadRequestException,
   UnauthorizedException,
-  HttpException,
-  HttpStatus
 } from '@nestjs/common';
 import { User } from 'src/db/entities/user.entity';
 import { pick } from 'lodash';
@@ -22,7 +19,6 @@ export class AuthGuard implements CanActivate {
     const password = parts.join(':');
     if (header && header.split(' ')[0] === 'Basic') {
       const user = await User.findOne({ user_id });
-
       if (user) {
         const authenticated = await user.validatePassword(password);
         if (authenticated) {
@@ -41,7 +37,7 @@ export class AuthGuard implements CanActivate {
     } else {
       throw new UnauthorizedException({
         message: 'Authentication Faild',
-      });      
+      });
     }
   }
 }

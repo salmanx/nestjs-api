@@ -7,20 +7,18 @@ import {
   IsHalfWidth,
   IsOptional,
   Length,
-  NotContains
 } from 'class-validator';
 
 export class AuthDto {
   @IsAlphanumeric()
-  @Length(6, 20)
-  @NotContains("Test")
+  @Length(6, 20)  
   user_id: string;
 
   @IsString()
   @IsAscii()
   @IsHalfWidth()
   @MinLength(8)
-  @MaxLength(20)  
+  @MaxLength(20)
   password: string;
 
   @IsOptional()
@@ -34,8 +32,10 @@ export class AuthDto {
 
 export class UserUpdateDto {
   @MaxLength(30)
+  @IsOptional()
   nickname: string;
 
   @MaxLength(100)
+  @IsOptional()
   comment: string;
 }

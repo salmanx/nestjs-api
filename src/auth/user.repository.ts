@@ -22,9 +22,12 @@ export class UserRepository extends Repository<User> {
       const data = await user.save();
       return data;
     } catch (error) {
-      // console.log(error);
       if (error.code === '23505') {
-        throw new ConflictException('user_id is already taken');
+        // 23505 is postgres error if uniq gets violation
+        throw new ConflictException({
+          error: 'already same user_id is used',
+          message: 'Account creation failed'
+        });
       } else {
         throw new InternalServerErrorException();
       }
@@ -46,14 +49,12 @@ export class UserRepository extends Repository<User> {
     try {
       user.nickname = nickname;
       user.comment = comment;
-      const save = await user.save();
-      return save;
+      const updatedUser = await user.save();
+      return updatedUser;
     } catch (error) {
       throw new InternalServerErrorException();
     }
   }
-
-  async deleteUser(user): Promise<void> {}
 
   private async generateHashPassword(
     password: string,
